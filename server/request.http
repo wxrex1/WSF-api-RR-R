@@ -1,0 +1,9 @@
+GET http://localhost:3000/format
+Accept: text/csv
+
+###
+GET http://localhost:3000/format-dash
+Accept: text/csv
+###
+GET http://localhost:3000/format-dash
+Accept: text/yaml
