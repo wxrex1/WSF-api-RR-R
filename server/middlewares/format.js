@@ -43,9 +43,12 @@ module.exports = function format(globalOptions = {}) {
     res.render = function (data, callOptions = {}) {
       res.set("Content-Type", acceptHeader);
       const formatter = formatters[formatKey].formatter;
-
+      const middlewaresOptions = {
+        rootName: "root",
+      };
       const config = {
         ...(globalOptions[formatKey] ?? {}),
+        ...middlewaresOptions,
         ...(callOptions[formatKey] ?? {}),
       };
       // const config = Object.assign({}, globalOptions[formatKey] ?? {}, callOptions[formatKey] ?? {});
