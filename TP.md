@@ -15,3 +15,19 @@ app.use("/users", apiVersions({
     v2: routerV2,
 }, "v2"));
 ```
+## TP3 : Gestion Traduction
+
+- Gérer la traduction via un middleware.
+- Configurer la langue via le Header HTTP adéquat
+- Ajouter une fonction **t** à la réponse correspondant à la fonction de traduction de i18next
+```js
+i18next.init({
+    ...
+});
+
+app.use(negociate_trad(i18next));
+
+app.get('/resources', (req, res) => {
+    res.send(res.t('key'));
+});
+```

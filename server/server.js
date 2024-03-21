@@ -8,6 +8,37 @@ const format = require("./corrections/mw-format");
 const yamlFormatter = require("./corrections/yamlFormatter");
 const apiVersions = require("./corrections/mw-apiversion");
 const app = express();
+const i18next = require("i18next");
+
+i18next.init({
+  fallbackLng: ["en", "fr", "de"],
+  resources: {
+    en: {
+      translation: {
+        top: "top",
+        male: "male",
+        bottom: "bottom",
+        female: "female",
+      },
+    },
+    fr: {
+      translation: {
+        top: "haut",
+        male: "homme",
+        bottom: "bas",
+        female: "femme",
+      },
+    },
+    de: {
+      translation: {
+        top: "oben",
+        male: "männlich",
+        bottom: "unten",
+        female: "weiblich",
+      },
+    },
+  },
+});
 
 app.get("/", function (req, res, next) {
   console.log("Query params", req.query);
@@ -27,6 +58,8 @@ app.use(
     },
   })
 );
+
+app.use(negociate_trad(i18next));
 
 app.get("/format", (req, res) => {
   res.render(
@@ -162,6 +195,68 @@ app.get(
     "v2"
   )
 );
+
+app.get("/clothes", (req, res) => {
+  res.render([
+    {
+      id: 1,
+      name: "t-shirt",
+      category: res.t("top"),
+      gender: res.t("male"),
+    },
+    {
+      id: 2,
+      name: "jeans",
+      category: res.t("bottom"),
+      gender: res.t("female"),
+    },
+  ]);
+});
+
+app.get("/clothes", (req, res) => {
+  let acceptedLanguage = req.headers["accept-language"] ?? "*";
+  if (acceptedLanguage !== "*") {
+    // fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5
+    acceptedLanguage = acceptedLanguage
+      .split(",")
+      .map((ponderatedLanguage) => {
+        // fr-CH ou fr;q=0.9
+        const [lng, ponderation] = ponderatedLanguage.trim().split(";");
+        // ["fr-CH", 1] ou [fr, 0.9]
+        return [
+          lng,
+          ponderation ? parseFloat(ponderation.replace("q=", "")) : 1,
+        ];
+      })
+      .sort((a, b) => {
+        // a = ["fr-CH", 1]
+        // b = [fr, 0.9]
+        if (a[1] > b[1]) return -1;
+        if (a[1] < b[1]) return 1;
+        return 0;
+      });
+
+    acceptedLanguage =
+      acceptedLanguage.find(([lng]) => i18next.languages.includes(lng))?.[0] ??
+      "*";
+  }
+  i18next.changeLanguage(acceptedLanguage);
+
+  res.render([
+    {
+      id: 1,
+      name: "t-shirt",
+      category: i18next.t("top"),
+      gender: i18next.t("male"),
+    },
+    {
+      id: 2,
+      name: "jeans",
+      category: i18next.t("bottom"),
+      gender: i18next.t("female"),
+    },
+  ]);
+});
 
 app.get("/v1/products", (req, res) => {
   res.render([
