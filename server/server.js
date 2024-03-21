@@ -6,6 +6,7 @@ const express = require("express");
 //const format = require("./middlewares/format");
 const format = require("./corrections/mw-format");
 const yamlFormatter = require("./corrections/yamlFormatter");
+const apiVersions = require("./corrections/mw-apiversion");
 const app = express();
 
 app.get("/", function (req, res, next) {
@@ -104,6 +105,64 @@ app.get("/users/:id/comments", (req, res) => {
   ]);
 });
 
+app.get(
+  "/:apiVersion/products",
+  apiVersions(
+    {
+      v1: (req, res) => {
+        res.render([
+          {
+            id: 1,
+            name: 'apple macbook pro m1 13"',
+          },
+        ]);
+      },
+      v2: (req, res) => {
+        res.render([
+          {
+            id: "018c68e9-c499-7319-b0cc-153405bca95f",
+            marque: "apple",
+            category: "laptop",
+            family: "macbook pro",
+            model: "m1",
+            size: '13"',
+          },
+        ]);
+      },
+    },
+    "v2"
+  )
+);
+app.get(
+  "/products",
+  apiVersions(
+    {
+      v1: (req, res) => {
+        res.render([
+          {
+            id: 1,
+            name: 'apple macbook pro m1 13"',
+          },
+        ]);
+      },
+      v2: (req, res) => {
+        console.log("here");
+        res.render([
+          {
+            id: "018c68e9-c499-7319-b0cc-153405bca95f",
+            marque: "apple",
+            category: "laptop",
+            family: "macbook pro",
+            model: "m1",
+            size: '13"',
+          },
+        ]);
+      },
+    },
+    "v2"
+  )
+);
+
 app.get("/v1/products", (req, res) => {
   res.render([
     {
@@ -125,6 +184,7 @@ app.get("/v2/products", (req, res) => {
     },
   ]);
 });
+
 app.get("/v:apiVersion/products", (req, res) => {
   console.log(req.params.apiVersion);
   const product = {

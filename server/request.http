@@ -55,4 +55,8 @@ Accept: text/xml
 ###
 GET http://localhost:3000/products
 Accept: text/xml
-Accept-Version: 4
+Accept-Version: v1
+
+###
+GET http://localhost:3000/v1/products
+Accept: text/xml
