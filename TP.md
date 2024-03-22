@@ -3,7 +3,6 @@
 Créer les formatters xml et yml en s'appuyant sur l'architecture vue en cours
 
 ## TP2 : Gestion Version
-
 - Gérer le versioning des routes au niveau d'un middleware.
 - Faire en sorte de pouvoir configurer les versions autorisés grâce à un objet de paramétrage.
 - Il faut s'assurer que la value de l'objet est de type **Router**
@@ -16,7 +15,6 @@ app.use("/users", apiVersions({
 }, "v2"));
 ```
 ## TP3 : Gestion Traduction
-
 - Gérer la traduction via un middleware.
 - Configurer la langue via le Header HTTP adéquat
 - Ajouter une fonction **t** à la réponse correspondant à la fonction de traduction de i18next
