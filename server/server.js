@@ -7,6 +7,7 @@ const express = require("express");
 const format = require("./corrections/mw-format");
 const yamlFormatter = require("./corrections/yamlFormatter");
 const apiVersions = require("./corrections/mw-apiversion");
+const negociate_trad = require("./corrections/mw-translation");
 const app = express();
 const i18next = require("i18next");
 
@@ -123,12 +124,65 @@ app.get("/users", (req, res) => {
     },
   ]);
 });
-app.get("/users/:id", (req, res) => {
+
+const itemUserHateoas = {
+  comments: "/comments",
+  self: true,
+  all: true,
+  verifyEmail: {
+    path: "/verify-email",
+    method: "POST",
+  },
+};
+
+app.get("/users/:id", hateoas(itemUserHateoas), (req, res) => {
   res.render({
     id: 1,
     fullname: "John Doe",
   });
 });
+
+app.get("/users/:id", (req, res) => {
+  const baseUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+  const links = Object.entries(itemUserHateoas)
+    .map(([key, value]) => {
+      const linkItem = {
+        rel: key,
+      };
+
+      let path;
+      if (typeof value === "boolean") {
+        switch (key) {
+          case "self":
+            path = baseUrl;
+            break;
+          case "all":
+            path = baseUrl.replace(/\/[^/]+$/, "");
+            break;
+        }
+      } else if (typeof value === "object") {
+        linkItem.type = value.method;
+        path = baseUrl + value.path;
+      }
+      linkItem.path = path;
+
+      let result = `<${linkItem.path}>; rel="${linkItem.rel}"`;
+      if (linkItem.type) {
+        result += `; type="${linkItem.type}"`;
+      }
+
+      return result;
+    })
+    .join(", ");
+
+  res.setHeader("Link", links);
+
+  res.render({
+    id: 1,
+    fullname: "John Doe",
+  });
+});
+
 app.get("/users/:id/comments", (req, res) => {
   res.render([
     {
@@ -196,7 +250,7 @@ app.get(
   )
 );
 
-app.get("/clothes", (req, res) => {
+app.get("/clothes2", (req, res) => {
   res.render([
     {
       id: 1,

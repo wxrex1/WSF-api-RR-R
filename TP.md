@@ -31,3 +31,19 @@ app.get('/resources', (req, res) => {
     res.send(res.t('key'));
 });
 ```
+
+## TP4 : HATEOAS
+- Permettre d'ajouter l'HATEOAS sur une route via un middleware
+- Implémenter le cas où la value est une string
+```js
+hateoas({
+  comments: "/comments",
+  self: true,
+  all: true,
+  //pagination: true,
+  verifyEmail: {
+    path: "/verify-email",
+    method: "POST",
+  },
+});
+```

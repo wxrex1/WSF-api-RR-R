@@ -62,5 +62,5 @@ GET http://localhost:3000/v1/products
 Accept: text/xml
 
 ###
-GET http://localhost:3000/clothes
-Accept-Language: *
+GET http://localhost:3000/clothes2
+Accept-Language: fr;q=0.8, *;q=0.9
