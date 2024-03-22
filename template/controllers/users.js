@@ -20,15 +20,19 @@ module.exports = {
   },
   patch: async (req, res, next) => {
     // UPDATE table SET col=value WHERE col=value RETURNING *;
+    if (req.user.id !== req.params.id && req.user.role !== "admin") {
+      return res.sendStatus(403);
+    }
     try {
-      const [nbUpdated, users] = await User.update(req.body, {
+      const [_, users] = await User.update(req.body, {
         where: {
           id: req.params.id,
         },
+        individualHooks: true,
         returning: true,
       });
-      console.log(nbUpdated, users);
-      if (nbUpdated) res.json(users[0]);
+
+      if (users.length) res.json(users[0]);
       else res.sendStatus(404);
     } catch (error) {
       next(error);

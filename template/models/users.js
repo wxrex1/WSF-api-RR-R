@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
+const bcrypt = require("bcryptjs");
 
 module.exports = function UserModelGenerator(connection) {
   class User extends Model {}
@@ -38,6 +39,14 @@ module.exports = function UserModelGenerator(connection) {
       sequelize: connection,
     }
   );
+
+  User.addHook("beforeCreate", async (user) => {
+    user.password = await bcrypt.hash(user.password, await bcrypt.genSalt());
+  });
+  User.addHook("beforeUpdate", async (user, options) => {
+    if (options.fields.includes("password"))
+      user.password = await bcrypt.hash(user.password, await bcrypt.genSalt());
+  });
 
   return User;
 };
