@@ -2,14 +2,13 @@ services:
   server:
     image: node:alpine
     volumes:
-      - ./server:/home/node/app
+      - .:/home/node/app    # Mount current directory
     working_dir: /home/node/app
     ports:
       - 127.0.0.1:3000:3000
     environment:
       PORT: 3000
       DATABASE_URL: postgres://user:password@database:5432/database
-    #command: sh -c "npm install && npm run dev:windows"
     command: sh -c "npm install && npm run dev"
 
   database:
