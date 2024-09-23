@@ -1,7 +1,9 @@
 module.exports = function (roles) {
+
   if (typeof roles === "string") {
     roles = [roles];
   }
+  
   return function (req, res, next) {
     if (!req.user) return res.sendStatus(401);
 
