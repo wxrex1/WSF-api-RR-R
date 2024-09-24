@@ -4,6 +4,7 @@ const UserRouter = require("./routes/users");
 const MorpionRouter = require("./routes/morpion");
 const SecurityRouter = require("./routes/security");
 const checkAuth = require("./middlewares/checkAuth");
+//const { format } = require("sequelize/lib/utils");
 
 const app = express();
 

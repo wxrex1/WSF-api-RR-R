@@ -11,8 +11,10 @@ module.exports = async (req, res, next) => {
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findByPk(payload.userID);
+    if (!req.user) return res.sendStatus(401);
     next();
   } catch (error) {
+    console.error(error);
     res.sendStatus(401);
   }
 };
