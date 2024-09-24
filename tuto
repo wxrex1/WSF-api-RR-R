@@ -1,7 +1,0 @@
-# Comment démarrer l'appli ?
-
-tu te met bien dans le dossier template (cd ...ton chemin\WSF-api-RR-R\template) puis :
-
-1. docker compose down (pour détruir les conteneur existant avec la db)
-2. docker compose up --build (pour demarrer le docker (--build pour construire le contenaur au début))
-3. Ctrl + V dans le terminal où tu as démarrer ton docker pour l'arrêter gentillement

@@ -1,0 +1,8 @@
+## Pour démarrer
+docker compose down (pour détruir les conteneur existant avec la db)
+docker compose up --build (pour demarrer le docker (--build pour construire le contenaur au début))
+Ctrl + V dans le terminal où tu as démarrer ton docker pour l'arrêter gentillement
+
+
+# Commentaires
+Nous avons eu des difficultés avec checkAuth qui nous empêché de tester 
