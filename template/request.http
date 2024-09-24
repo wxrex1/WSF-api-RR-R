@@ -1,7 +1,7 @@
 ###
-GET http://localhost:4000/users
+GET http://localhost:3000/users
 ###
-POST http://localhost:4000/users
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
@@ -10,11 +10,20 @@ Content-Type: application/json
     "password": "Azerty12345!"
 }
 ###
-GET http://localhost:4000/users/1
+GET http://localhost:3000/users/1
 ###
-GET http://localhost:4000/users/068db4a0-2e50-4c87-bef1-35970f14ceb4
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+    "lastname": "Smith",
+    "email": "smith@test.com",
+    "password": "Azerty12345!"
+}
+
+GET http://localhost:3000/users/068db4a0-2e50-4c87-bef1-35970f14ceb4
 ###
-PUT http://localhost:4000/users/068db4a0-2e50-4c87-bef1-35970f14ceb4
+PUT http://localhost:3000/users/068db4a0-2e50-4c87-bef1-35970f14ceb4
 Content-Type: application/json
 
 {

@@ -1,17 +1,21 @@
 require("dotenv").config();
 const express = require("express");
 const UserRouter = require("./routes/users");
-const MorpionRouter = require("./routes/morpion");
+//const MorpionRouter = require("./routes/morpion");
 const SecurityRouter = require("./routes/security");
-const checkAuth = require("./middlewares/checkAuth");
+//const checkAuth = require("./middlewares/checkAuth");
 
 const app = express();
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the Morpion API");
+});
+
 app.use("/security", SecurityRouter);
 app.use("/users", UserRouter);
-app.use("/morpion", checkAuth, ProductRouter);
+//app.use("/morpion", checkAuth, ProductRouter);
 
 app.listen(process.env.PORT, () =>
   console.log("Server listening on port " + process.env.PORT)
