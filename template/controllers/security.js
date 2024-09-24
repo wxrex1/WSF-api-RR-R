@@ -1,6 +1,11 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { User } = require("../models");
+const users = require("./users");
+
+
+
+
 
 module.exports = {
   login: async (req, res, next) => {
@@ -24,6 +29,14 @@ module.exports = {
       process.env.JWT_SECRET
     );
 
-    res.json({ token });
+    res.json({
+      token,
+      links: {
+        self: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
+        user: `${req.protocol}://${req.get('host')}/users/${user.id}`,
+        logout: `${req.protocol}://${req.get('host')}/logout`
+      }
+    });
   },
+
 };

@@ -49,10 +49,10 @@ module.exports = {
     }
   },
   patch: async (req, res, next) => {
-    if (req.user.id !== req.params.id && req.user.role !== "admin") {
-      return res.sendStatus(403);
-    }
     try {
+      if (req.user.id !== req.params.id && req.user.role !== "admin") {
+        return res.sendStatus(403);
+      }
       const [_, users] = await User.update(req.body, {
         where: {
           id: req.params.id,
@@ -113,4 +113,5 @@ module.exports = {
       next(error);
     }
   },
+ 
 };

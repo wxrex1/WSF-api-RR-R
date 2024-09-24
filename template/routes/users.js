@@ -10,7 +10,7 @@ router.get("/", UserController.cget);
 router.get("/admin", /* middlewares */ checkAuth, checkRole("admin"), UserController.cget);      
 
 // Collection route : POST : create an user
-router.post("/register", /* middlewares */ UserController.register);                                     
+router.post("/register", /* middlewares */ UserController.post);                                     
 
 // Item route : GET : fetch an user                                      
 router.get("/:id", /* middlewares */ UserController.iget);
