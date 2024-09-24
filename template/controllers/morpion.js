@@ -5,8 +5,26 @@ module.exports = {
     createGame: async (req, res) => {
         try {
             const { player1Id, player2Id } = req.body;
+
+            // Verify that both players exist
+            const player1 = await User.findByPk(player1Id);
+            const player2 = await User.findByPk(player2Id);
+
+
+            
+            if (!player1 || !player2) {
+                return res.status(404).json({ error: "One or both players not found" });
+            }
+
             const newGame = await Morpion.create({ player1Id, player2Id, board: Array(9).fill(null), currentPlayer: player1Id });
-            res.status(201).json(newGame);
+            res.status(201).json({
+                ...newGame.toJSON(),
+                links: {
+                    self: `/games/${newGame.id}`,
+                    makeMove: `/games/${newGame.id}/move`,
+                    checkWinner: `/games/${newGame.id}/winner`
+                }
+            });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -18,7 +36,14 @@ module.exports = {
             if (!game) {
                 return res.status(404).json({ error: "Game not found" });
             }
-            res.status(200).json(game);
+            res.status(200).json({
+                ...game.toJSON(),
+                links: {
+                    self: `/games/${game.id}`,
+                    makeMove: `/games/${game.id}/move`,
+                    checkWinner: `/games/${game.id}/winner`
+                }
+            });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -30,6 +55,12 @@ module.exports = {
             const game = await Morpion.findByPk(gameId);
             if (!game) {
                 return res.status(404).json({ error: "Game not found" });
+            }
+
+            // Verify that the player exists
+            const player = await User.findByPk(playerId);
+            if (!player) {
+                return res.status(404).json({ error: "Player not found" });
             }
 
             if (game.currentPlayer !== playerId) {
@@ -44,7 +75,14 @@ module.exports = {
             game.currentPlayer = game.currentPlayer === game.player1Id ? game.player2Id : game.player1Id;
             await game.save();
 
-            res.status(200).json(game);
+            res.status(200).json({
+                ...game.toJSON(),
+                links: {
+                    self: `/games/${game.id}`,
+                    makeMove: `/games/${game.id}/move`,
+                    checkWinner: `/games/${game.id}/winner`
+                }
+            });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -58,7 +96,14 @@ module.exports = {
             }
 
             const winner = calculateWinner(game.board);
-            res.status(200).json({ winner });
+            res.status(200).json({
+                winner,
+                links: {
+                    self: `/games/${game.id}`,
+                    makeMove: `/games/${game.id}/move`,
+                    checkWinner: `/games/${game.id}/winner`
+                }
+            });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

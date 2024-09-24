@@ -1,6 +1,3 @@
-const { Morpion } = require("../models");
-const { User } = require("../models");
-
 const validateMovePosition = (req, res, next) => {
     const { position } = req.body;
     if (position < 0 || position > 8) {

@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 
 app.use("/security", SecurityRouter);
 app.use("/users", UserRouter);
-app.use("/morpion", checkAuth, MorpionRouter);
+app.use("/morpion", MorpionRouter);
 
 app.listen(process.env.PORT, () =>
   console.log("Server listening on port " + process.env.PORT)

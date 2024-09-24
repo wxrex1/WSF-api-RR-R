@@ -6,42 +6,40 @@ module.exports = function createMorpionModel(connection) {
 	Morpion.setup = function () {
 		Morpion.init(
 			{
-        gameBoard: {
-					type: DataTypes.ARRAY(DataTypes.ARRAY(DataTypes.STRING)),
+				gameBoard: {
+					type: DataTypes.ARRAY(DataTypes.STRING),
 					allowNull: true,
-					defaultValue: [
-						["", "", ""],["", "", ""],["", "", ""],
-					],
+					defaultValue: Array(9).fill(null),
 				},
 				gameId: {
 					type: DataTypes.INTEGER,
 					primaryKey: true,
 					allowNull: false,
+					autoIncrement: true,
 				},
-				player1: {
-					type: DataTypes.STRING,
+				player1Id: {
+					type: DataTypes.INTEGER,
 					allowNull: false,
 				},
-				player2: {
-					type: DataTypes.STRING,
+				player2Id: {
+					type: DataTypes.INTEGER,
 					allowNull: true,
 				},
 				gameWinner: {
 					type: DataTypes.STRING,
 					allowNull: true,
 				},
-				activePlayer: {
-					type: DataTypes.STRING,
+				currentPlayer: {
+					type: DataTypes.INTEGER,
 					allowNull: false,
-					defaultValue: "player1",
 				},
 			},
 			{
 				sequelize: connection,
+				modelName: 'Morpion',
 			}
 		);
 	};
 
 	return Morpion;
 };
-

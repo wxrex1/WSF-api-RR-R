@@ -1,5 +1,4 @@
 const { Morpion } = require("../models");
-const { User } = require("../models");
 
 const validateGameId = async (req, res, next) => {
     try {
