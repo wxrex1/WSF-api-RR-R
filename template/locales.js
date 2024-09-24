@@ -1,0 +1,1 @@
+// inscrire les traductions pour l'api (messages à l'utilisateur)
